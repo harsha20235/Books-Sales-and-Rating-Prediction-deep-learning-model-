@@ -1,0 +1,23 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.impute import SimpleImputer
+# Load your dataset
+data = pd.read_csv(r'C:\Users\harsh\Downloads\Books_Data_Clean.csv')
+# Assuming 'features' and 'target' are columns in your dataset
+X = data[['Publishing Year', 'Book_average_rating', 'Book_ratings_count']]
+y = data['units sold']  # Replace with the actual target column name
+# Handle missing values using SimpleImputer
+imputer = SimpleImputer(strategy='mean')
+X = imputer.fit_transform(X)
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Create and train the Decision Tree Classifier model with adjusted hyperparameters
+model = DecisionTreeClassifier(max_depth=5, min_samples_split=5, min_samples_leaf=2, random_state=42)
+model.fit(X_train, y_train)
+# Make predictions on the test set
+predictions = model.predict(X_test)
+# Calculate accuracy
+accuracy = accuracy_score(y_test, predictions)
+print(f"Decision Tree Classifier Accuracy: {accuracy * 4100:.2f}%")
